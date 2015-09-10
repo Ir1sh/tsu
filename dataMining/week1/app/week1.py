@@ -49,13 +49,13 @@ class CoinToss():
             tossed = tossed + 1
             #do the requested action if it is at the requested interval ie 100 % 100 = 0 therefore do the action
             if(tossed % doEvery == 0):
-                doSomething([heads, tails])
-        #return a list with two items the number of heads and the number of tails
-        return [heads, tails]
+                doSomething([tossed, heads, tails])
+        #return a list with three items the number of tosses, the number of heads and the number of tails
+        return [tossed, heads, tails]
 
-    def getProportion(self, a, b):
+    def getProportion(self, total, num):
         #get proportion as a float
-        return float(a) / float(b)
+        return float(num) / float(total)
 
     def questionOne(self):
         def doThis(res):
@@ -67,13 +67,29 @@ class CoinToss():
             #print the number of heads less half the number of tosses
             # this number approaches zero because as N increases the number of heads results will approach 50%
             doThis(res)
-            print(res[0] - 2500)
+            print(res[1] - 2500)
 
 
-        self.customTosser(5000, doThis, 100)
-        print('No these numbers appear to be approaching 0.5 not 0 as N increases')
+        userInput = raw_input('how many times should we toss the coin? (use a number larger than 100) \nLeave blank to use 1000.\n')
+        if(userInput):
+            try:
+                toss = int(userInput)
+            except:
+                toss = 1000
+        else:
+            toss = 1000
 
-        self.customTosser(5000, nowDoThis, 100)
+        self.customTosser(toss, doThis, 100)
+        print('These numbers approach zero as N increases')
+        userInput = raw_input('how many times should we toss the coin? (use a number larger than 100) \nLeave blank to use 1000.\n')
+        if(userInput):
+            try:
+                toss = int(userInput)
+            except:
+                toss = 1000
+        else:
+            toss = 1000
+        self.customTosser(toss, nowDoThis, 100)
         print('the number of heads less half the number of tosses appears to be approaching zero as N increases')
 
     def questionTwo(self):
@@ -81,7 +97,7 @@ class CoinToss():
         # this function returns true if the proportion of toss results is within the
         #parameters given by the question ie p is within 0.1 of 0.5
         def isWithinParams(res):
-            p = self.getProportion(res[0], res[1]) - 0.5
+            p = self.getProportion(res[0], res[1])
             return p > 0.4 and p < 0.6 
 
         def doThis(res):
@@ -91,25 +107,33 @@ class CoinToss():
             else:
                 results[1] = results[1] + 1
 
+        userInput = raw_input('how many times should we toss the coin? \nLeave blank to use 120.\n')
+        if(userInput):
+            try:
+                toss = int(userInput)
+            except:
+                toss = 120
+        else:
+            toss = 120
         #run the experiment 100 times
         for i in range(100):
-            self.customTosser(1500, doThis, 1500)
+            self.customTosser(toss, doThis, toss)
         
 
         print('the proportion of results within our params was :')
         print(results[0], results[1])
-        print('N needs to be approximately 1200 - 1500 to so that approx 95 out of 100 times the proportion of heads is between .4 and .6')
+        print('N needs to be approximately 120 to so that approx 95 out of 100 times the proportion of heads is between .4 and .6')
 
 
 
 
 def run():
-    print('Mark Moore solutions for CS-583 - Week 1')
-    print('Informatics Problem 6.14.5:') 
-    print('When you slice the given string after the colon and convert to a float you get %s' % StringQuestions().convertToFloat())
-    print('Informatics Problem 7.11.1:')
-    print('The required file in uppercase is:')
-    StringQuestions().convertFileToUpperCase('./app/mobox-short.txt')
+    #print('Mark Moore solutions for CS-583 - Week 1')
+    #print('Informatics Problem 6.14.5:') 
+    #print('When you slice the given string after the colon and convert to a float you get %s' % StringQuestions().convertToFloat())
+    #print('Informatics Problem 7.11.1:')
+    #print('The required file in uppercase is:')
+    #StringQuestions().convertFileToUpperCase('./app/mobox-short.txt')
     print('Probability Page 12, Problem 1')
     CoinToss().questionOne()
     print('Probability Page 12, Problem 2')
